@@ -3,10 +3,10 @@ import { ConfigPlugin, withDangerousMod } from "expo/config-plugins";
 import * as fs from "fs";
 import * as path from "path";
 
-export const withPodfile: ConfigPlugin<{ targetName: string }> = (
-  config,
-  { targetName }
-) => {
+export const withPodfile: ConfigPlugin<{
+  targetName: string;
+  pods?: string[];
+}> = (config, { targetName, pods = [] }) => {
   return withDangerousMod(config, [
     "ios",
     (config) => {
@@ -59,6 +59,8 @@ export const withPodfile: ConfigPlugin<{ targetName: string }> = (
           `target '${targetName}' do
             use_frameworks! :linkage => podfile_properties['ios.useFrameworks'].to_sym if podfile_properties['ios.useFrameworks']
             use_frameworks! :linkage => ENV['USE_FRAMEWORKS'].to_sym if ENV['USE_FRAMEWORKS']
+
+            ${pods.map((pod) => `pod '${pod}'`).join("\n")}
           end`
         )
         .concat(`\n# >>> Inserted by react-native-widget-extension`);

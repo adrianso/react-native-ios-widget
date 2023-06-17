@@ -25,8 +25,13 @@ export function addBuildPhases(
   const buildPath = `""`;
   const folderType = "app_extension";
 
-  const { swiftFiles, assetDirectories, entitlementFiles, plistFiles } =
-    widgetFiles;
+  const {
+    swiftFiles,
+    assetDirectories,
+    entitlementFiles,
+    plistFiles,
+    fontFiles,
+  } = widgetFiles;
 
   // Sources build phase
   xcodeProject.addBuildPhase(
@@ -68,7 +73,7 @@ export function addBuildPhases(
 
   // Resources build phase
   xcodeProject.addBuildPhase(
-    [...assetDirectories],
+    [...assetDirectories, ...fontFiles],
     "PBXResourcesBuildPhase",
     groupName,
     targetUuid,

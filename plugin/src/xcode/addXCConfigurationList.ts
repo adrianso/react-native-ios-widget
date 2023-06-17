@@ -30,7 +30,7 @@ export function addXCConfigurationList(
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = G76836P2D4;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
-				
+
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				MARKETING_VERSION = 1.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
@@ -52,6 +52,7 @@ export function addXCConfigurationList(
     INFOPLIST_KEY_NSHumanReadableCopyright: `""`,
     MARKETING_VERSION: `"${marketingVersion}"`,
     SWIFT_OPTIMIZATION_LEVEL: `"-Onone"`,
+    CODE_SIGN_ENTITLEMENTS: "WidgetsExtension/WidgetsExtension.entitlements",
     // DEVELOPMENT_TEAM: `"G76836P2D4"`,
   };
 

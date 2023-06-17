@@ -1,21 +1,28 @@
-import { ConfigPlugin, IOSConfig, withPlugins } from "expo/config-plugins";
-import { withConfig } from "./withConfig";
-import { withPodfile } from "./withPodfile";
-
+import { ConfigPlugin, withPlugins } from "expo/config-plugins";
 import { withXcode } from "./withXcode";
+import { withWidgetExtensionEntitlements } from "./withWidgetExtensionEntitlements";
+import { withPodfile } from "./withPodfile";
+import { withConfig } from "./withConfig";
 
-const withLiveActivities: ConfigPlugin<{
+const withWidget: ConfigPlugin<{
   frequentUpdates?: boolean;
   widgetsFolder?: string;
   deploymentTarget?: string;
+  groupIdentifier?: string;
+  pods?: string[];
+  widgetName: string;
 }> = (
   config,
-  { frequentUpdates, widgetsFolder = "widgets", deploymentTarget = "16.2" }
+  {
+    frequentUpdates,
+    deploymentTarget = "14.0",
+    widgetsFolder = "widgets",
+    groupIdentifier,
+    pods,
+  }
 ) => {
-  const targetName = `${IOSConfig.XcodeUtils.sanitizedName(
-    config.name
-  )}Widgets`;
-  const bundleIdentifier = `${config.ios?.bundleIdentifier}.${targetName}`;
+  const targetName = "WidgetsExtension";
+  const bundleIdentifier = `${config.ios?.bundleIdentifier}.Widgets`;
 
   config.ios = {
     ...config.ios,
@@ -26,7 +33,7 @@ const withLiveActivities: ConfigPlugin<{
     },
   };
 
-  config = withPlugins(config, [
+  return withPlugins(config, [
     [
       withXcode,
       {
@@ -36,11 +43,10 @@ const withLiveActivities: ConfigPlugin<{
         widgetsFolder,
       },
     ],
-    [withPodfile, { targetName }],
-    [withConfig, { targetName, bundleIdentifier }],
+    [withWidgetExtensionEntitlements, { targetName, groupIdentifier }],
+    [withPodfile, { targetName, pods }],
+    [withConfig, { targetName, bundleIdentifier, groupIdentifier }],
   ]);
-
-  return config;
 };
 
-export default withLiveActivities;
+export default withWidget;

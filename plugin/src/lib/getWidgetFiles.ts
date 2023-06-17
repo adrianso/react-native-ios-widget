@@ -5,6 +5,7 @@ export type WidgetFiles = {
   swiftFiles: string[];
   entitlementFiles: string[];
   plistFiles: string[];
+  fontFiles: string[];
   assetDirectories: string[];
 };
 
@@ -13,6 +14,7 @@ export function getWidgetFiles(widgetsPath: string, targetPath: string) {
     swiftFiles: [],
     entitlementFiles: [],
     plistFiles: [],
+    fontFiles: [],
     assetDirectories: [],
   };
 
@@ -34,6 +36,8 @@ export function getWidgetFiles(widgetsPath: string, targetPath: string) {
         widgetFiles.entitlementFiles.push(file);
       } else if (fileExtension === "plist") {
         widgetFiles.plistFiles.push(file);
+      } else if (fileExtension === "ttf" || fileExtension === "otf") {
+        widgetFiles.fontFiles.push(file);
       } else if (fileExtension === "xcassets") {
         widgetFiles.assetDirectories.push(file);
       }
@@ -45,6 +49,7 @@ export function getWidgetFiles(widgetsPath: string, targetPath: string) {
     ...widgetFiles.swiftFiles,
     ...widgetFiles.entitlementFiles,
     ...widgetFiles.plistFiles,
+    ...widgetFiles.fontFiles,
   ].forEach((file) => {
     const source = path.join(widgetsPath, file);
     copyFileSync(source, targetPath);
@@ -56,14 +61,14 @@ export function getWidgetFiles(widgetsPath: string, targetPath: string) {
     path.join(widgetsPath, "Module.swift"),
     path.join(modulePath, "Module.swift")
   );
-  console.log(
-    path.join(widgetsPath, "Module.swift"),
-    path.join(modulePath, "Module.swift")
-  );
-  copyFileSync(
-    path.join(widgetsPath, "Attributes.swift"),
-    path.join(modulePath, "Attributes.swift")
-  );
+  // console.log(
+  //   path.join(widgetsPath, "Module.swift"),
+  //   path.join(modulePath, "Module.swift")
+  // );
+  // copyFileSync(
+  //   path.join(widgetsPath, "Attributes.swift"),
+  //   path.join(modulePath, "Attributes.swift")
+  // );
 
   // Copy directories
   widgetFiles.assetDirectories.forEach((directory) => {
