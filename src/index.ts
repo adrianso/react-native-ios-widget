@@ -1,20 +1,13 @@
 import { Platform } from "react-native";
-import { requireNativeModule } from "expo-modules-core";
+import ExpoWidget from "./ExpoModule";
 
-const ExpoWidget =
-  Platform.OS === "ios"
-    ? requireNativeModule("ReactNativeWidgetExtension")
-    : undefined;
-
-const checkWidgetSupport = () => {
+const supportWidgets = (() => {
   if (Platform.OS === "ios") {
     return parseInt(Platform.Version, 10) >= 14;
   }
 
   return false;
-};
-
-const supportWidgets = checkWidgetSupport();
+})();
 
 export const reloadAllTimelines = async () => {
   if (!supportWidgets || !ExpoWidget) {

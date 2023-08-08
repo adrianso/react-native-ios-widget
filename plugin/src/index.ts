@@ -3,38 +3,35 @@ import { withXcode } from "./withXcode";
 import { withWidgetExtensionEntitlements } from "./withWidgetExtensionEntitlements";
 import { withPodfile } from "./withPodfile";
 import { withConfig } from "./withConfig";
+import { WidgetPluginProps } from "./types";
 
-const withWidget: ConfigPlugin<{
-  widgetsFolder?: string;
-  deploymentTarget?: string;
-  groupIdentifier?: string;
-  pods?: string[];
-  widgetName: string;
-}> = (
+const withWidget: ConfigPlugin<WidgetPluginProps> = (
   config,
   {
+    enabled = true,
     deploymentTarget = "14.0",
     widgetsFolder = "widgets",
     groupIdentifier,
-    pods,
+    pods = [],
+    targetName = "WidgetsExtension",
+    bundleIdentifier = `${config.ios?.bundleIdentifier}.Widgets`,
   }
 ) => {
-  const targetName = "WidgetsExtension";
-  const bundleIdentifier = `${config.ios?.bundleIdentifier}.Widgets`;
+  const props: WidgetPluginProps = {
+    enabled,
+    deploymentTarget,
+    widgetsFolder,
+    groupIdentifier,
+    pods,
+    targetName,
+    bundleIdentifier,
+  };
 
   return withPlugins(config, [
-    [
-      withXcode,
-      {
-        targetName,
-        bundleIdentifier,
-        deploymentTarget,
-        widgetsFolder,
-      },
-    ],
-    [withWidgetExtensionEntitlements, { targetName, groupIdentifier }],
-    [withPodfile, { targetName, pods }],
-    [withConfig, { targetName, bundleIdentifier, groupIdentifier }],
+    [withXcode, props],
+    [withWidgetExtensionEntitlements, props],
+    [withPodfile, props],
+    [withConfig, props],
   ]);
 };
 

@@ -4,13 +4,15 @@ import * as fs from "fs";
 import * as path from "path";
 
 import { getWidgetExtensionEntitlements } from "./lib/getWidgetExtensionEntitlements";
+import { WidgetPluginProps } from "./types";
 
-export const withWidgetExtensionEntitlements: ConfigPlugin<{
-  targetName: string;
-  targetPath: string;
-  groupIdentifier: string;
-  appleSignin: boolean;
-}> = (config, { targetName, groupIdentifier }) => {
+export const withWidgetExtensionEntitlements: ConfigPlugin<
+  Required<WidgetPluginProps>
+> = (config, { enabled, targetName, groupIdentifier }) => {
+  if (!enabled) {
+    return config;
+  }
+
   return withInfoPlist(config, (config) => {
     const targetPath = path.join(
       config.modRequest.platformProjectRoot,

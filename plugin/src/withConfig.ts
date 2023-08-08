@@ -3,12 +3,16 @@ import {
   addApplicationGroupsEntitlement,
   getWidgetExtensionEntitlements,
 } from "./lib/getWidgetExtensionEntitlements";
+import { WidgetPluginProps } from "./types";
 
-export const withConfig: ConfigPlugin<{
-  bundleIdentifier: string;
-  targetName: string;
-  groupIdentifier?: string;
-}> = (config, { bundleIdentifier, targetName, groupIdentifier }) => {
+export const withConfig: ConfigPlugin<Required<WidgetPluginProps>> = (
+  config,
+  { enabled, groupIdentifier, targetName, bundleIdentifier }
+) => {
+  if (!enabled) {
+    return config;
+  }
+
   let configIndex: null | number = null;
   config.extra?.eas?.build?.experimental?.ios?.appExtensions?.forEach(
     (ext: any, index: number) => {

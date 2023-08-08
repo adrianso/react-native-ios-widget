@@ -2,11 +2,16 @@ import { mergeContents } from "@expo/config-plugins/build/utils/generateCode";
 import { ConfigPlugin, withDangerousMod } from "expo/config-plugins";
 import * as fs from "fs";
 import * as path from "path";
+import { WidgetPluginProps } from "./types";
 
-export const withPodfile: ConfigPlugin<{
-  targetName: string;
-  pods?: string[];
-}> = (config, { targetName, pods = [] }) => {
+export const withPodfile: ConfigPlugin<Required<WidgetPluginProps>> = (
+  config,
+  { enabled, targetName, pods }
+) => {
+  if (!enabled) {
+    return config;
+  }
+
   return withDangerousMod(config, [
     "ios",
     (config) => {
@@ -15,20 +20,6 @@ export const withPodfile: ConfigPlugin<{
         "Podfile"
       );
       let podFileContent = fs.readFileSync(podFilePath).toString();
-
-      /* podFileContent = mergeContents({
-        tag: "withWidgetExtensionPodfile1999999999",
-        src: podFileContent,
-        newSrc: `  target '${targetName}' do\n    \n  end`,
-        anchor: /post_install/,
-        offset: 0,
-        comment: "#",
-      }).contents; */
-
-      /* podFileContent = podFileContent.replace(
-        /use_expo_modules!/,
-        `use_expo_modules!(searchPaths: ["./node_modules", "../../node_modules", "../../../WidgetExtension"])`
-      ); */
 
       podFileContent = mergeContents({
         tag: "react-native-widget-extension-1",
@@ -43,15 +34,6 @@ export const withPodfile: ConfigPlugin<{
         offset: 0,
         comment: "#",
       }).contents;
-
-      /* podFileContent = mergeContents({
-        tag: "react-native-widget-extension-2",
-        src: podFileContent,
-        newSrc: `pod 'WidgetExtension', :path => '../WidgetExtension/ios'`,
-        anchor: /use_react_native/,
-        offset: -1,
-        comment: "#",
-      }).contents; */
 
       podFileContent = podFileContent
         .concat(`\n\n# >>> Inserted by react-native-widget-extension\n`)

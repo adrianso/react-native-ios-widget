@@ -61,14 +61,6 @@ export function getWidgetFiles(widgetsPath: string, targetPath: string) {
     path.join(widgetsPath, "Module.swift"),
     path.join(modulePath, "Module.swift")
   );
-  // console.log(
-  //   path.join(widgetsPath, "Module.swift"),
-  //   path.join(modulePath, "Module.swift")
-  // );
-  // copyFileSync(
-  //   path.join(widgetsPath, "Attributes.swift"),
-  //   path.join(modulePath, "Attributes.swift")
-  // );
 
   // Copy directories
   widgetFiles.assetDirectories.forEach((directory) => {

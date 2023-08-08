@@ -9,29 +9,25 @@ import { addTargetDependency } from "./xcode/addTargetDependency";
 import { addPbxGroup } from "./xcode/addPbxGroup";
 import { addBuildPhases } from "./xcode/addBuildPhases";
 import { getWidgetFiles } from "./lib/getWidgetFiles";
+import { WidgetPluginProps } from "./types";
 
-export const withXcode: ConfigPlugin<{
-  targetName: string;
-  bundleIdentifier: string;
-  deploymentTarget: string;
-  widgetsFolder: string;
-}> = (
+export const withXcode: ConfigPlugin<Required<WidgetPluginProps>> = (
   config,
-  { targetName, bundleIdentifier, deploymentTarget, widgetsFolder }
+  { enabled, targetName, bundleIdentifier, deploymentTarget, widgetsFolder }
 ) => {
   return withXcodeProject(config, (config) => {
-    const xcodeProject = config.modResults;
-    const widgetsPath = path.join(config.modRequest.projectRoot, widgetsFolder);
+    const { platformProjectRoot, projectRoot } = config.modRequest;
 
-    const targetUuid = xcodeProject.generateUuid();
-    const groupName = "Embed Foundation Extensions";
-    const { platformProjectRoot } = config.modRequest;
-    const marketingVersion = config.version;
-
+    const widgetsPath = path.join(projectRoot, widgetsFolder);
     const targetPath = path.join(platformProjectRoot, targetName);
-
     const widgetFiles = getWidgetFiles(widgetsPath, targetPath);
 
+    if (!enabled) {
+      return config;
+    }
+
+    const xcodeProject = config.modResults;
+    const marketingVersion = config.version;
     const xCConfigurationList = addXCConfigurationList(xcodeProject, {
       targetName,
       currentProjectVersion: config.ios!.buildNumber || "1",
@@ -40,11 +36,13 @@ export const withXcode: ConfigPlugin<{
       marketingVersion,
     });
 
+    const groupName = "Embed Foundation Extensions";
     const productFile = addProductFile(xcodeProject, {
       targetName,
       groupName,
     });
 
+    const targetUuid = xcodeProject.generateUuid();
     const target = addToPbxNativeTargetSection(xcodeProject, {
       targetName,
       targetUuid,
