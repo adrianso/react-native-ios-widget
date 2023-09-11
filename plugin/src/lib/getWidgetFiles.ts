@@ -9,7 +9,7 @@ export type WidgetFiles = {
   assetDirectories: string[];
 };
 
-export function getWidgetFiles(widgetsPath: string, targetPath: string) {
+export const getWidgetFiles = (widgetsPath: string, targetPath: string) => {
   const widgetFiles: WidgetFiles = {
     swiftFiles: [],
     entitlementFiles: [],
@@ -65,13 +65,13 @@ export function getWidgetFiles(widgetsPath: string, targetPath: string) {
   // Copy directories
   widgetFiles.assetDirectories.forEach((directory) => {
     const imagesXcassetsSource = path.join(widgetsPath, directory);
-    copyFolderRecursiveSync(imagesXcassetsSource, targetPath);
+    copyDirectorySync(imagesXcassetsSource, targetPath);
   });
 
   return widgetFiles;
-}
+};
 
-export function copyFileSync(source: string, target: string) {
+const copyFileSync = (source: string, target: string) => {
   let targetFile = target;
 
   if (fs.existsSync(target) && fs.lstatSync(target).isDirectory()) {
@@ -79,9 +79,9 @@ export function copyFileSync(source: string, target: string) {
   }
 
   fs.writeFileSync(targetFile, fs.readFileSync(source));
-}
+};
 
-function copyFolderRecursiveSync(source: string, target: string) {
+const copyDirectorySync = (source: string, target: string) => {
   const targetPath = path.join(target, path.basename(source));
   if (!fs.existsSync(targetPath)) {
     fs.mkdirSync(targetPath, { recursive: true });
@@ -92,10 +92,10 @@ function copyFolderRecursiveSync(source: string, target: string) {
     files.forEach((file) => {
       const currentPath = path.join(source, file);
       if (fs.lstatSync(currentPath).isDirectory()) {
-        copyFolderRecursiveSync(currentPath, targetPath);
+        copyDirectorySync(currentPath, targetPath);
       } else {
         copyFileSync(currentPath, targetPath);
       }
     });
   }
-}
+};

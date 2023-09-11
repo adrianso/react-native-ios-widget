@@ -3,9 +3,9 @@ import {
   addApplicationGroupsEntitlement,
   getWidgetExtensionEntitlements,
 } from "./lib/getWidgetExtensionEntitlements";
-import { WidgetPluginProps } from "./types";
+import { WidgetConfig } from "./types";
 
-export const withConfig: ConfigPlugin<Required<WidgetPluginProps>> = (
+export const withConfig: ConfigPlugin<Required<WidgetConfig>> = (
   config,
   { enabled, groupIdentifier, targetName, bundleIdentifier }
 ) => {

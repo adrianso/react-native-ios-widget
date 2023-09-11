@@ -1,4 +1,4 @@
-export interface WidgetPluginProps {
+export interface WidgetConfig {
   enabled?: boolean;
   widgetsFolder?: string;
   deploymentTarget?: string;

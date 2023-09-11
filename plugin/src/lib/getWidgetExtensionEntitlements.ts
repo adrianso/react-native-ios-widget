@@ -1,24 +1,24 @@
 import { ExportedConfig, InfoPlist } from "expo/config-plugins";
 
-export function getWidgetExtensionEntitlements(
+export const getWidgetExtensionEntitlements = (
   iosConfig: ExportedConfig["ios"],
   {
     groupIdentifier,
   }: {
     groupIdentifier?: string;
   }
-) {
+) => {
   const entitlements: InfoPlist = {};
 
   addApplicationGroupsEntitlement(entitlements, groupIdentifier);
 
   return entitlements;
-}
+};
 
-export function addApplicationGroupsEntitlement(
+export const addApplicationGroupsEntitlement = (
   entitlements: InfoPlist,
   groupIdentifier?: string
-) {
+) => {
   if (groupIdentifier) {
     const existingApplicationGroups =
       (entitlements["com.apple.security.application-groups"] as string[]) ?? [];
@@ -30,4 +30,4 @@ export function addApplicationGroupsEntitlement(
   }
 
   return entitlements;
-}
+};

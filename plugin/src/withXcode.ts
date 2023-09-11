@@ -9,9 +9,9 @@ import { addTargetDependency } from "./xcode/addTargetDependency";
 import { addPbxGroup } from "./xcode/addPbxGroup";
 import { addBuildPhases } from "./xcode/addBuildPhases";
 import { getWidgetFiles } from "./lib/getWidgetFiles";
-import { WidgetPluginProps } from "./types";
+import { WidgetConfig } from "./types";
 
-export const withXcode: ConfigPlugin<Required<WidgetPluginProps>> = (
+export const withXcode: ConfigPlugin<Required<WidgetConfig>> = (
   config,
   { enabled, targetName, bundleIdentifier, deploymentTarget, widgetsFolder }
 ) => {

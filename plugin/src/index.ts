@@ -3,9 +3,9 @@ import { withXcode } from "./withXcode";
 import { withWidgetExtensionEntitlements } from "./withWidgetExtensionEntitlements";
 import { withPodfile } from "./withPodfile";
 import { withConfig } from "./withConfig";
-import { WidgetPluginProps } from "./types";
+import { WidgetConfig } from "./types";
 
-const withWidget: ConfigPlugin<WidgetPluginProps> = (
+const withWidget: ConfigPlugin<WidgetConfig> = (
   config,
   {
     enabled = true,
@@ -17,7 +17,7 @@ const withWidget: ConfigPlugin<WidgetPluginProps> = (
     bundleIdentifier = `${config.ios?.bundleIdentifier}.Widgets`,
   }
 ) => {
-  const props: WidgetPluginProps = {
+  const widget: WidgetConfig = {
     enabled,
     deploymentTarget,
     widgetsFolder,
@@ -28,10 +28,10 @@ const withWidget: ConfigPlugin<WidgetPluginProps> = (
   };
 
   return withPlugins(config, [
-    [withXcode, props],
-    [withWidgetExtensionEntitlements, props],
-    [withPodfile, props],
-    [withConfig, props],
+    [withXcode, widget],
+    [withWidgetExtensionEntitlements, widget],
+    [withPodfile, widget],
+    [withConfig, widget],
   ]);
 };
 

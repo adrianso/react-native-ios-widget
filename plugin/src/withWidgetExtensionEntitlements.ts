@@ -4,10 +4,10 @@ import * as fs from "fs";
 import * as path from "path";
 
 import { getWidgetExtensionEntitlements } from "./lib/getWidgetExtensionEntitlements";
-import { WidgetPluginProps } from "./types";
+import { WidgetConfig } from "./types";
 
 export const withWidgetExtensionEntitlements: ConfigPlugin<
-  Required<WidgetPluginProps>
+  Required<WidgetConfig>
 > = (config, { enabled, targetName, groupIdentifier }) => {
   if (!enabled) {
     return config;

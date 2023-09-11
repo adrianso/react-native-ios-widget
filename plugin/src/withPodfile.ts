@@ -2,9 +2,9 @@ import { mergeContents } from "@expo/config-plugins/build/utils/generateCode";
 import { ConfigPlugin, withDangerousMod } from "expo/config-plugins";
 import * as fs from "fs";
 import * as path from "path";
-import { WidgetPluginProps } from "./types";
+import { WidgetConfig } from "./types";
 
-export const withPodfile: ConfigPlugin<Required<WidgetPluginProps>> = (
+export const withPodfile: ConfigPlugin<Required<WidgetConfig>> = (
   config,
   { enabled, targetName, pods }
 ) => {
