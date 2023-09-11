@@ -1,6 +1,6 @@
 {
   "name": "react-native-ios-widget",
-  "version": "0.0.8",
+  "version": "0.0.9-beta.1",
   "description": "Expo config plugin to add widgets to a React Native app",
   "main": "build/index.js",
   "types": "build/index.d.ts",
