@@ -1,6 +1,6 @@
 {
   "name": "react-native-ios-widget",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "description": "Expo config plugin to add widgets to a React Native app",
   "main": "build/index.js",
   "types": "build/index.d.ts",
@@ -22,7 +22,7 @@
   "license": "MIT",
   "homepage": "https://github.com/adrianso/react-native-ios-widget",
   "dependencies": {
-    "@expo/config-plugins": "^7.2.5"
+    "@expo/config-plugins": "~10.1.2"
   },
   "devDependencies": {
     "@types/jest": "^29.5.2",
@@ -40,7 +40,7 @@
   "peerDependencies": {
     "expo": "*",
     "react": "*",
-    "react-native": "*"
+    "react-native": ">=53.0.0"
   },
   "engines": {
     "node": ">=18.16.0"
