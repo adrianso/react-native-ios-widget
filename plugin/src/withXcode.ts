@@ -18,13 +18,19 @@ export const withXcode: ConfigPlugin<Required<WidgetConfig>> = (
   return withXcodeProject(config, (config) => {
     const { platformProjectRoot, projectRoot } = config.modRequest;
 
-    const widgetsPath = path.join(projectRoot, widgetsFolder);
-    const targetPath = path.join(platformProjectRoot, targetName);
-    const widgetFiles = getWidgetFiles(widgetsPath, targetPath);
-
     if (!enabled) {
       return config;
     }
+
+    const widgetsPath = path.join(projectRoot, widgetsFolder);
+    const targetPath = path.join(platformProjectRoot, targetName);
+    const moduleRoot = path.join(
+      projectRoot,
+      "node_modules",
+      "react-native-ios-widget",
+      "ios"
+    );
+    const widgetFiles = getWidgetFiles(widgetsPath, targetPath, moduleRoot);
 
     const xcodeProject = config.modResults;
     const marketingVersion = config.version;

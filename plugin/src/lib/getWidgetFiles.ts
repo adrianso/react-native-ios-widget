@@ -9,7 +9,11 @@ export type WidgetFiles = {
   assetDirectories: string[];
 };
 
-export const getWidgetFiles = (widgetsPath: string, targetPath: string) => {
+export const getWidgetFiles = (
+  widgetsPath: string,
+  targetPath: string,
+  moduleRoot: string
+) => {
   const widgetFiles: WidgetFiles = {
     swiftFiles: [],
     entitlementFiles: [],
@@ -20,6 +24,20 @@ export const getWidgetFiles = (widgetsPath: string, targetPath: string) => {
 
   if (!fs.existsSync(targetPath)) {
     fs.mkdirSync(targetPath, { recursive: true });
+  }
+
+  // Ensure moduleRoot directory exists
+  if (!fs.existsSync(moduleRoot)) {
+    fs.mkdirSync(moduleRoot, { recursive: true });
+  }
+
+  // Check if Module.swift exists before proceeding
+  const moduleSwiftPath = path.join(widgetsPath, "Module.swift");
+  if (!fs.existsSync(moduleSwiftPath)) {
+    throw new Error(
+      `Module.swift not found at ${moduleSwiftPath}. ` +
+        `The widgets folder must contain a Module.swift file for the ReactNativeWidgetExtension module to build correctly.`
+    );
   }
 
   if (fs.lstatSync(widgetsPath).isDirectory()) {
@@ -55,12 +73,8 @@ export const getWidgetFiles = (widgetsPath: string, targetPath: string) => {
     copyFileSync(source, targetPath);
   });
 
-  // Copy Module.swift and Attributes.swift
-  const modulePath = path.join(__dirname, "../../../ios");
-  copyFileSync(
-    path.join(widgetsPath, "Module.swift"),
-    path.join(modulePath, "Module.swift")
-  );
+  // Copy Module.swift to moduleRoot (package ios directory)
+  copyFileSync(moduleSwiftPath, path.join(moduleRoot, "Module.swift"));
 
   // Copy directories
   widgetFiles.assetDirectories.forEach((directory) => {
@@ -78,7 +92,7 @@ const copyFileSync = (source: string, target: string) => {
     targetFile = path.join(target, path.basename(source));
   }
 
-  fs.writeFileSync(targetFile, fs.readFileSync(source));
+  fs.copyFileSync(source, targetFile);
 };
 
 const copyDirectorySync = (source: string, target: string) => {
