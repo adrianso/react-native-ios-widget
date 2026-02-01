@@ -26,17 +26,15 @@ export const getWidgetFiles = (
     fs.mkdirSync(targetPath, { recursive: true });
   }
 
-  // Ensure moduleRoot directory exists
   if (!fs.existsSync(moduleRoot)) {
     fs.mkdirSync(moduleRoot, { recursive: true });
   }
 
-  // Check if Module.swift exists before proceeding
   const moduleSwiftPath = path.join(widgetsPath, "Module.swift");
   if (!fs.existsSync(moduleSwiftPath)) {
     throw new Error(
       `Module.swift not found at ${moduleSwiftPath}. ` +
-        `The widgets folder must contain a Module.swift file for the ReactNativeWidgetExtension module to build correctly.`
+        "The widgets folder must contain Module.swift to build ReactNativeWidgetExtension."
     );
   }
 
@@ -73,7 +71,6 @@ export const getWidgetFiles = (
     copyFileSync(source, targetPath);
   });
 
-  // Copy Module.swift to moduleRoot (package ios directory)
   copyFileSync(moduleSwiftPath, path.join(moduleRoot, "Module.swift"));
 
   // Copy directories
