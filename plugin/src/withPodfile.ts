@@ -29,9 +29,8 @@ export const withPodfile: ConfigPlugin<Required<WidgetConfig>> = (
 \t\t\t\tconfig.build_settings['APPLICATION_EXTENSION_API_ONLY'] = 'No'
 \t\t\tend
 \t\tend`,
-        anchor:
-          /installer.target_installation_results.pod_target_installation_results/,
-        offset: 8,
+        anchor: /react_native_post_install\(/,
+        offset: 6,
         comment: "\t\t#",
       }).contents;
 
