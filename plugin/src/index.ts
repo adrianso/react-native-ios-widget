@@ -1,4 +1,8 @@
-import { ConfigPlugin, withPlugins } from "expo/config-plugins";
+import {
+  ConfigPlugin,
+  createRunOncePlugin,
+  withPlugins,
+} from "expo/config-plugins";
 import { withXcode } from "./withXcode";
 import { withWidgetExtensionEntitlements } from "./withWidgetExtensionEntitlements";
 import { withPodfile } from "./withPodfile";
@@ -15,7 +19,7 @@ const withWidget: ConfigPlugin<WidgetConfig> = (
     pods = [],
     targetName = "WidgetsExtension",
     bundleIdentifier = `${config.ios?.bundleIdentifier}.Widgets`,
-  }
+  },
 ) => {
   const widget: WidgetConfig = {
     enabled,
@@ -35,4 +39,4 @@ const withWidget: ConfigPlugin<WidgetConfig> = (
   ]);
 };
 
-export default withWidget;
+export default createRunOncePlugin(withWidget, "react-native-ios-widget");
