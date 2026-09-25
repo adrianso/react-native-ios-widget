@@ -13,7 +13,6 @@ const withWidget: ConfigPlugin<WidgetConfig> = (
   config,
   {
     enabled = true,
-    deploymentTarget = "14.0",
     widgetsFolder = "widgets",
     groupIdentifier,
     pods = [],
@@ -23,7 +22,6 @@ const withWidget: ConfigPlugin<WidgetConfig> = (
 ) => {
   const widget: WidgetConfig = {
     enabled,
-    deploymentTarget,
     widgetsFolder,
     groupIdentifier,
     pods,

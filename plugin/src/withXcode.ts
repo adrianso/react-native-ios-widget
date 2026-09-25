@@ -10,11 +10,17 @@ import { addTargetDependency } from "./xcode/addTargetDependency";
 import { addPbxGroup } from "./xcode/addPbxGroup";
 import { addBuildPhases } from "./xcode/addBuildPhases";
 import { getWidgetFiles } from "./lib/getWidgetFiles";
+import { getMainAppDeploymentTarget } from "./xcode/getMainAppDeploymentTarget";
 import { WidgetConfig } from "./types";
+
+// Fallback floor when neither the app config nor the Xcode project provide a
+// deployment target. Matches the minimum of recent React Native/Expo versions
+// and current Xcode.
+const DEFAULT_DEPLOYMENT_TARGET = "15.1";
 
 export const withXcode: ConfigPlugin<Required<WidgetConfig>> = (
   config,
-  { enabled, targetName, bundleIdentifier, deploymentTarget, widgetsFolder }
+  { enabled, targetName, bundleIdentifier, widgetsFolder }
 ) => {
   return withXcodeProject(config, (config) => {
     const { platformProjectRoot, projectRoot } = config.modRequest;
@@ -36,6 +42,14 @@ export const withXcode: ConfigPlugin<Required<WidgetConfig>> = (
     const widgetFiles = getWidgetFiles(widgetsPath, targetPath, moduleRoot);
 
     const xcodeProject = config.modResults;
+    // The widget extension deploys to the same iOS version as the host app.
+    // ios.deploymentTarget is cast because older @expo/config-types versions
+    // don't declare it.
+    const deploymentTarget =
+      (config.ios as { deploymentTarget?: string } | undefined)
+        ?.deploymentTarget ??
+      getMainAppDeploymentTarget(xcodeProject) ??
+      DEFAULT_DEPLOYMENT_TARGET;
     const marketingVersion = config.version;
     const xCConfigurationList = addXCConfigurationList(xcodeProject, {
       targetName,

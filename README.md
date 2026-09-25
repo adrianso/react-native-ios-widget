@@ -39,7 +39,6 @@ startActivity(3, "4343", "$32.23", driverName, 47, 43);
 
 - frequentUpdates (boolean, default: false): Depending on this param, NSSupportsLiveActivitiesFrequentUpdates will be set
 - widgetsFolder (string, default: "widgets"): Path from the project root to the folder containing the Swift widget files
-- deploymentTarget (string, default: "16.2"): The minimum deployment target for the app
 <!--
 - moduleFileName (string, default: "Module.swift"): File within the widget folder that defines the native module
 - attributesFileName (string): File within the widget folder that defined the widget attributes
@@ -58,21 +57,9 @@ Some background on how the **PizzaDelivery** example works:
 
 ## Deployment Target
 
-By default, this module adds a minimum deployment target of iOS 16.2, because otherwise Swift compilation fails if you try to use Live Activities. If you want to support earliert versions of iOS, you can manually set the deployment target via plugin config:
+By default, the widget extension gets the same minimum iOS deployment target as the host app — read from `expo.ios.deploymentTarget` in your app config, or from the app target's `IPHONEOS_DEPLOYMENT_TARGET` in the Xcode project — so it never requires an iOS version below or above what the app itself supports. If neither is set, `"15.1"` is used. To change the deployment target, set `expo.ios.deploymentTarget` in your app config.
 
-```json
-"expo": {
-    "name": "my-app",
-    "plugins": [
-        [
-            "react-native-widget-extension",
-            { "deploymentTarget": "14.0" },
-        ],
-    ]
-}
-```
-
-If you do this and you still use Live Activities in Swift, you have to make sure to guard the code that can only run on iOS 16.2 and later like this:
+If your deployment target is below iOS 16.2 and you still use Live Activities in Swift, you have to make sure to guard the code that can only run on iOS 16.2 and later like this:
 
 ```swift
 import SwiftUI
